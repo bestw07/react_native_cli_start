@@ -12,6 +12,8 @@ target 'react_native_cli_start' do
     :hermes_enabled => false
   )
 
+  pod 'RNSensors', :path => '../node_modules/react-native-sensors'
+
   target 'react_native_cli_startTests' do
     inherit! :complete
     # Pods for testing

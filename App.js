@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
+import type { Node } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -26,7 +26,15 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
+import {
+  accelerometer,
+  gyroscope,
+  setUpdateIntervalForType,
+  SensorTypes
+} from "react-native-sensors";
+import { map, filter } from "rxjs/operators";
+
+const Section = ({ children, title }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -55,9 +63,33 @@ const Section = ({children, title}): Node => {
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
+  const [x, setX] = React.useState(0);
+  const [y, setY] = React.useState(0);
+  const [z, setZ] = React.useState(0);
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  console.log(`start === 1`);
+
+  setUpdateIntervalForType(SensorTypes.accelerometer, 400); // defaults to 100ms
+
+  console.log(`start === 2`);
+
+  const subscription = accelerometer.subscribe(({ x, y, z, timestamp }) => {
+    setX(x);
+    setY(y);
+    setZ(z);
+    console.log('RN sensors ===', x, y, z, timestamp);
+  });
+
+  console.log(`start === 3`);
+
+  setTimeout(() => {
+    console.log(`end === 4`);
+    subscription.unsubscribe();
+  }, 100000);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -70,6 +102,9 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <Section title="Accelerometer">
+            X: <Text style={styles.highlight}>{x}</Text> Y: <Text style={styles.highlight}>{y}</Text> Z: <Text style={styles.highlight}>{z}</Text>
+          </Section>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen.
