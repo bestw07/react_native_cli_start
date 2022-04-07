@@ -7,7 +7,6 @@
  */
 
 import React from 'react';
-import type { Node } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -34,7 +33,7 @@ import {
 } from "react-native-sensors";
 import { map, filter } from "rxjs/operators";
 
-const Section = ({ children, title }): Node => {
+const Section = ({ children, title }) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -60,7 +59,7 @@ const Section = ({ children, title }): Node => {
   );
 };
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const [x, setX] = React.useState(0);
@@ -73,7 +72,7 @@ const App: () => Node = () => {
 
   console.log(`start === 1`);
 
-  setUpdateIntervalForType(SensorTypes.accelerometer, 400); // defaults to 100ms
+  setUpdateIntervalForType(SensorTypes.accelerometer, 1000); // defaults to 100ms
 
   console.log(`start === 2`);
 
